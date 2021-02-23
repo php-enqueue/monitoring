@@ -43,7 +43,8 @@ class ClientMonitoringExtension implements PostSendExtensionInterface
             $context->getTransportMessage()->getMessageId(),
             $context->getTransportMessage()->getCorrelationId(),
             $context->getTransportMessage()->getHeaders(),
-            $context->getTransportMessage()->getProperties()
+            $context->getTransportMessage()->getProperties(),
+            $context->getTransportMessage()->getBody()
         );
 
         $this->safeCall(function () use ($stats) {

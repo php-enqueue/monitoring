@@ -41,6 +41,11 @@ class SentMessageStats implements Stats
      */
     protected $properties;
 
+    /**
+     * @var string
+     */
+    protected $body;
+
     public function __construct(
         int $timestampMs,
         string $destination,
@@ -48,7 +53,8 @@ class SentMessageStats implements Stats
         ?string $messageId,
         ?string $correlationId,
         array $headers,
-        array $properties
+        array $properties,
+        string $body
     ) {
         $this->timestampMs = $timestampMs;
         $this->destination = $destination;
@@ -57,6 +63,7 @@ class SentMessageStats implements Stats
         $this->correlationId = $correlationId;
         $this->headers = $headers;
         $this->properties = $properties;
+        $this->body = $body;
     }
 
     public function getTimestampMs(): int
@@ -92,5 +99,10 @@ class SentMessageStats implements Stats
     public function getProperties(): array
     {
         return $this->properties;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
     }
 }

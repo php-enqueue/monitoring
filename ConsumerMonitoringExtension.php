@@ -174,6 +174,7 @@ class ConsumerMonitoringExtension implements StartExtensionInterface, PreSubscri
             $context->getMessage()->getCorrelationId(),
             $context->getMessage()->getHeaders(),
             $context->getMessage()->getProperties(),
+            $context->getMessage()->getBody(),
             $context->getMessage()->isRedelivered(),
             ConsumedMessageStats::STATUS_FAILED,
             get_class($context->getException()),
@@ -256,6 +257,7 @@ class ConsumerMonitoringExtension implements StartExtensionInterface, PreSubscri
             $context->getMessage()->getCorrelationId(),
             $context->getMessage()->getHeaders(),
             $context->getMessage()->getProperties(),
+            $context->getMessage()->getBody(),
             $context->getMessage()->isRedelivered(),
             $status
         );

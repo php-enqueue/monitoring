@@ -52,6 +52,11 @@ class ConsumedMessageStats implements Stats
     protected $properties;
 
     /**
+     * @var string
+     */
+    protected $body;
+
+    /**
      * @var bool;
      */
     protected $redelivered;
@@ -100,6 +105,7 @@ class ConsumedMessageStats implements Stats
         ?string $correlationId,
         array $headers,
         array $properties,
+        string $body,
         bool $redelivered,
         string $status,
         string $errorClass = null,
@@ -117,6 +123,7 @@ class ConsumedMessageStats implements Stats
         $this->correlationId = $correlationId;
         $this->headers = $headers;
         $this->properties = $properties;
+        $this->body = $body;
         $this->redelivered = $redelivered;
         $this->status = $status;
 
@@ -166,6 +173,11 @@ class ConsumedMessageStats implements Stats
     public function getProperties(): array
     {
         return $this->properties;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
     }
 
     public function isRedelivered(): bool
