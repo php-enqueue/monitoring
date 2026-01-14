@@ -21,6 +21,11 @@ class DatadogStorage implements StatsStorage
      */
     private $datadog;
 
+    /**
+     * @var array
+     */
+    private $additionalTags = [];
+
     public function __construct($config = 'datadog:')
     {
         if (false === class_exists(DogStatsd::class)) {
@@ -46,6 +51,8 @@ class DatadogStorage implements StatsStorage
                 'queue' => $queue,
                 'consumerId' => $stats->getConsumerId(),
             ];
+
+            $tags = $this->addAdditionalTags($tags);
 
             if ($stats->getFinishedAtMs()) {
                 $values['finishedAtMs'] = $stats->getFinishedAtMs();
@@ -77,6 +84,8 @@ class DatadogStorage implements StatsStorage
             $tags['command'] = $properties[Config::COMMAND];
         }
 
+        $tags = $this->addAdditionalTags($tags);
+
         $this->datadog->increment($this->config['metric.messages.sent'], 1, $tags);
     }
 
@@ -86,6 +95,8 @@ class DatadogStorage implements StatsStorage
             'queue' => $stats->getQueue(),
             'status' => $stats->getStatus(),
         ];
+
+        $tags = $this->addAdditionalTags($tags);
 
         if (ConsumedMessageStats::STATUS_FAILED === $stats->getStatus()) {
             $this->datadog->increment($this->config['metric.messages.failed'], 1, $tags);
@@ -161,5 +172,26 @@ class DatadogStorage implements StatsStorage
             'metric.consumers.requeued' => 'enqueue.consumers.requeued',
             'metric.consumers.memoryUsage' => 'enqueue.consumers.memoryUsage',
         ], $config);
+    }
+
+    public function getAdditionalTags(): array
+    {
+        return $this->additionalTags;
+    }
+
+    public function setAdditionalTags(array $additionalTags): self
+    {
+        $this->additionalTags = $additionalTags;
+
+        return $this;
+    }
+
+    private function addAdditionalTags(array $tags): array
+    {
+        foreach ($this->additionalTags as $tagKey => $tagValue) {
+            $tags[$tagKey] = $tagValue;
+        }
+
+        return $tags;
     }
 }
